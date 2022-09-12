@@ -1,3 +1,5 @@
+
+
 function notif(text){
     let div = document.createElement('div')
     div.classList.add('center-modal')
