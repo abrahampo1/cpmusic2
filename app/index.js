@@ -5,15 +5,6 @@ let MainWindow
 let Reproductor
 
 function createWindow(){
-    MainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
-        webPreferences:{
-            nodeIntegration: true,
-            contextIsolation: false
-        }
-    })
-    MainWindow.loadURL('http://192.168.5.30')
     Reproductor = new BrowserWindow({
         width: 1920,
         height: 1080,
@@ -24,6 +15,16 @@ function createWindow(){
         }
     })
     Reproductor.loadURL('http://192.168.5.30/pantalla')
+    MainWindow = new BrowserWindow({
+        width: 800,
+        height: 600,
+        webPreferences:{
+            nodeIntegration: true,
+            contextIsolation: false
+        }
+    })
+    MainWindow.loadURL('http://192.168.5.30')
+    
 }
 
 
