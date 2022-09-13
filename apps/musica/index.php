@@ -3,13 +3,10 @@
     <br>
     <br>
     <div class="w100">
-        <input type="text" placeholder="Pega el URL de YouTube" id="url">
-        <div class="center">
-            <button onclick="add_queue()">Añadir A La Cola</button>
-        </div>
+        <input type="text" onchange="search()" placeholder="Buscar..." id="url">
+
     </div>
-    <h1>Reproduciendo Ahora</h1>
-    <div class="queue" id="nowvideo">
+    <div id="search_results">
 
     </div>
     <h1>Cola de canciones</h1>
@@ -20,33 +17,52 @@
 
 
 <script>
-    function send_video() {
-        let url = document.getElementById('url').value;
-        let load = notif('cargando...');
-        obtener_url_video(url).then(r => {
-            load.innerText = 'OK';
-            setTimeout(() => {
-                load.remove()
-            }, 1000);
-            ipcRenderer.send('pantalla', {
-                type: 'video',
-                url: r
-            })
-        })
-    }
+function search() {
+    let url = document.getElementById('url').value;
+    let load = notif('Buscando...');
+    yt.search(url).then(r => {
+        $(load).fadeOut();
+        console.log(r);
+        $('#search_results').html('')
+        r.forEach(video => {
+            $('#search_results').append(`
+            
+            <div class="queuevideo click" onclick="add_queue('${video.url}')">
+                <div class="w100" >${video.title}</div>
+            </div>
+            
+            `)
+        });
+    })
+}
 
-    function load_queue() {
-        let queue = localStorage.getItem('queue')
-        if (!queue) {
-            localStorage.setItem('queue', '[]')
-            queue = [];
-        } else {
-            queue = JSON.parse(queue)
-        }
-        $('#queue').html('')
-        let i = 1
-        queue.forEach(video => {
-            $('#queue').append(`
+function send_video(url) {
+    $('#search_results').html('')
+    let load = notif('cargando...');
+    obtener_url_video(url).then(r => {
+        load.innerText = 'OK';
+        setTimeout(() => {
+            $(load).fadeOut();
+        }, 1000);
+        ipcRenderer.send('pantalla', {
+            type: 'video',
+            url: r
+        })
+    })
+}
+
+function load_queue() {
+    let queue = localStorage.getItem('queue')
+    if (!queue) {
+        localStorage.setItem('queue', '[]')
+        queue = [];
+    } else {
+        queue = JSON.parse(queue)
+    }
+    $('#queue').html('')
+    let i = 1
+    queue.forEach(video => {
+        $('#queue').append(`
             
             <div class="queuevideo">
                 <div class="w10">${i}</div>
@@ -55,55 +71,57 @@
             </div>
             
             `)
-            i++;
-        });
-        let now = localStorage.getItem('now')
-        if (now == undefined) {
-            localStorage.setItem('now', '{}')
-            now = {};
-        } else {
-            now = JSON.parse(now)
-        }
-        $('#nowvideo').html('')
+        i++;
+    });
 
-        $('#nowvideo').append(`
-            
-            <div class="queuevideo">
-                <div class="w80">${now.raw.title}</div>
-                <div class="w20"><button class="btn" onclick="toggle_video(this)">Pausar</button></div>
-            </div>
-            
-            `)
-    }
-    load_queue()
+}
+load_queue()
 
-    function video(accion) {
-        ipcRenderer.send('pantalla', {
-            type: 'control',
-            action: accion
-        })
-    }
 
-    ipcRenderer.on('app', (s, data) => {
+
+ipcRenderer.on('app', (s, data) => {
+    setTimeout(() => {
         load_queue()
-    })
+    }, 100);
+})
 
-    let play = true
+let play = true
 
-    function toggle_video(btn) {
-        if (play) {
-            play = false;
-            video('pause')
-            btn.innerText = 'Reproducir'
+function toggle_video(btn) {
+    if (play) {
+        play = false;
+        video('pause')
+        btn.innerText = 'Reproducir'
 
-        } else {
-            btn.innerText = 'Pausar'
-            play = true;
-            video('play')
-        }
+    } else {
+        btn.innerText = 'Pausar'
+        play = true;
+        video('play')
     }
+}
 
-    function delete_queue(id) {
+function delete_queue(id) {
+    let queue = localStorage.getItem('queue')
+    if (!queue) {
+        localStorage.setItem('queue', '[]')
+        queue = [];
+    } else {
+        queue = JSON.parse(queue)
+    }
+    queue.splice(id, 1)
+    localStorage.setItem('queue', JSON.stringify(queue))
+    load_queue()
+}
+
+
+function add_queue(url) {
+    $('#search_results').html('')
+    let load = notif('cargando...');
+    obtener_url_video(url).then(r => {
+        load.innerText = 'OK';
+        setTimeout(() => {
+            $(load).fadeOut();
+        }, 1000);
         let queue = localStorage.getItem('queue')
         if (!queue) {
             localStorage.setItem('queue', '[]')
@@ -111,33 +129,18 @@
         } else {
             queue = JSON.parse(queue)
         }
-        queue.splice(id, 1)
+
+        queue.push(r)
+
         localStorage.setItem('queue', JSON.stringify(queue))
+
         load_queue()
-    }
+        if (!variable('now')) {
+            ipcRenderer.send('pantalla', {
+                type: 'load_video'
+            })
+        }
 
-    function add_queue() {
-        let url = document.getElementById('url').value;
-        let load = notif('cargando...');
-        obtener_url_video(url).then(r => {
-            load.innerText = 'OK';
-            setTimeout(() => {
-                load.remove()
-            }, 1000);
-            let queue = localStorage.getItem('queue')
-            if (!queue) {
-                localStorage.setItem('queue', '[]')
-                queue = [];
-            } else {
-                queue = JSON.parse(queue)
-            }
-
-            queue.push(r)
-
-            localStorage.setItem('queue', JSON.stringify(queue))
-
-            load_queue()
-
-        })
-    }
+    })
+}
 </script>

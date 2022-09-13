@@ -1,5 +1,6 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
 
+const url = 'http://musica.localhost'
 
 let MainWindow
 let Reproductor
@@ -9,21 +10,23 @@ function createWindow(){
         width: 1920,
         height: 1080,
         title: 'PANTALLA',
+        autoHideMenuBar: true,
         webPreferences:{
             nodeIntegration: true,
             contextIsolation: false
         }
     })
-    Reproductor.loadURL('http://192.168.5.30/pantalla')
+    Reproductor.loadURL(url+ '/pantalla')
     MainWindow = new BrowserWindow({
         width: 800,
         height: 600,
+        autoHideMenuBar: true,
         webPreferences:{
             nodeIntegration: true,
             contextIsolation: false
         }
     })
-    MainWindow.loadURL('http://192.168.5.30')
+    MainWindow.loadURL(url)
     
 }
 

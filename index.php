@@ -7,7 +7,7 @@ include 'router.php';
 
 
     Route::add('/', function () {
-        include 'apps/home/index.php';
+        include 'apps/musica/index.php';
     });
 
     // Accept only numbers as parameter. Other characters will result in a 404 error

@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "jquery": "^3.6.1",
-    "youtube-dl-exec": "^2.1.5"
+    "youtube-dl-exec": "^2.1.5",
+    "youtube-search-without-api-key": "^1.0.7"
   }
 }
