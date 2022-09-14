@@ -23,7 +23,7 @@
         <img src="img/logoasorey16.png" alt="">
         <div class="reproductor">
             <div class="flex">
-                <p id="track_title">Imanol Zambrana</p>
+                <p id="track_title"></p>
                 <p id="track_artist"></p>
             </div>
             <div class="controls">

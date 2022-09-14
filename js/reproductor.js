@@ -60,3 +60,32 @@ $("#volume_control").on("input", () => {
 $("#next_song").on("click", () => {
   video("next");
 });
+
+function add_queue(url) {
+  $("#search_results").html("");
+  let load = notif("cargando...");
+  obtener_url_video(url).then((r) => {
+    load.innerText = "OK";
+    setTimeout(() => {
+      $(load).fadeOut();
+    }, 1000);
+    let queue = localStorage.getItem("queue");
+    if (!queue) {
+      localStorage.setItem("queue", "[]");
+      queue = [];
+    } else {
+      queue = JSON.parse(queue);
+    }
+
+    queue.push(r);
+
+    localStorage.setItem("queue", JSON.stringify(queue));
+
+    load_queue();
+    if (!variable("now")) {
+      ipcRenderer.send("pantalla", {
+        type: "load_video",
+      });
+    }
+  });
+}

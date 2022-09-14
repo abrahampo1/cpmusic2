@@ -223,4 +223,8 @@ setInterval(() => {
     $('.hora').html(currenttime.getHours() + ':' + ('0' + currenttime.getMinutes()).substr(-
         2))
 }, 100);
+
+const server = false
+
+
 </script>

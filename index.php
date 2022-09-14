@@ -21,3 +21,8 @@ include 'router.php';
     });
 
 Route::run('/');
+
+
+?>
+
+<script src="js/webapi.js"></script>
