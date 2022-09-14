@@ -1,5 +1,7 @@
 const { resolve } = require("path");
-const youtubedl = require("youtube-dl-exec");
+const { create: createYoutubeDl} = require("youtube-dl-exec");
+const appRootDir = require("app-root-dir").get();
+
 const { ipcRenderer } = require("electron");
 
 window.$ = window.jQuery = require("jquery");
