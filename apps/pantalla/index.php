@@ -129,6 +129,7 @@ function load_video() {
         ipcRenderer.send('app', {
             type: 'clearstatus'
         })
+        set({type: 'pantalla', pantalla: 'avisos'})
     }
 }
 
