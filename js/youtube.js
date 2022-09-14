@@ -1,12 +1,14 @@
 const { resolve } = require("path");
-const { create: createYoutubeDl} = require("youtube-dl-exec");
+const { create: createYoutubeDl } = require("youtube-dl-exec");
 const appRootDir = require("app-root-dir").get();
+let fullurl =
+  appRootDir +
+  "/../app.asar.unpacked/node_modules/youtube-dl-exec/bin/youtube-dl.exe";
+const youtubedl = createYoutubeDl(fullurl);
 
 const { ipcRenderer } = require("electron");
 
 window.$ = window.jQuery = require("jquery");
-
-
 
 function obtener_url_video(url) {
   return new Promise((resolve, reject) => {

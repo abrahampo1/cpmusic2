@@ -1,6 +1,6 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
 
-const url = 'http://musica.localhost'
+const url = 'https://music.ro-am.eu'
 
 let MainWindow
 let Reproductor
