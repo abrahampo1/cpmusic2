@@ -3,7 +3,7 @@ const { create: createYoutubeDl } = require("youtube-dl-exec");
 const appRootDir = require("app-root-dir").get();
 let fullurl =
   appRootDir +
-  "/../app.asar.unpacked/node_modules/youtube-dl-exec/bin/youtube-dl.exe";
+  "/../app.asar.unpacked/node_modules/youtube-dl-exec/bin/yt-dlp.exe";
 const youtubedl = createYoutubeDl(fullurl);
 
 const { ipcRenderer } = require("electron");
