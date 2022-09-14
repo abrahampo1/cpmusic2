@@ -129,6 +129,8 @@ function load_video() {
         ipcRenderer.send('app', {
             type: 'clearstatus'
         })
+        $('.video-title').html('No hay música en el hilo')
+        $('.video-artist').html('')
         set({type: 'pantalla', pantalla: 'avisos'})
     }
 }
