@@ -130,7 +130,7 @@
             $('#videoclip-info').fadeIn();
             setTimeout(() => {
                 $('#videoclip-info').fadeOut();
-            }, 5000);
+            }, 15000);
         } else {
             let autoplay = variable('playlists')
             if (autoplay['auto']) {
