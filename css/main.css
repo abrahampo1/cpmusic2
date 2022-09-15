@@ -260,6 +260,11 @@ video {
 
 .video-info h1 {
   font-size: 30px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  width: 100%;
+
 }
 
 .video-info h2 {
