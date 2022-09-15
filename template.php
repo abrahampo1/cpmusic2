@@ -46,6 +46,7 @@
     </nav>
     <div class="sidebar">
         <a href="/musica" class="app">Musica</a>
+        <a href="/playlists" class="app">Playlists</a>
         <a href="/avisos" class="app">Avisos</a>
         <a href="/ajustespantalla" class="app">Pantalla</a>
     </div>

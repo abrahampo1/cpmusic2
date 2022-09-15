@@ -26,7 +26,7 @@
     </div>
     <div class="full center pant" style="display: none;" id="videos">
         <video id="video" src=""></video>
-        <div class="video-info">
+        <div class="video-info" id="videoclip-info">
             <h1 class="video-title"></h1>
             <h2 class="video-artist"></h2>
         </div>
@@ -40,18 +40,18 @@
 
 
 <script>
-let current_status
-ipcRenderer.on('pantalla', (sender, data) => {
-    set(data)
-})
+    let current_status
+    ipcRenderer.on('pantalla', (sender, data) => {
+        set(data)
+    })
 
-function cargar_avisos() {
-    if (avisos = variable('avisos')) {
-        let i = 0;
-        $('#avisos_data').html('')
-        avisos.forEach(aviso => {
+    function cargar_avisos() {
+        if (avisos = variable('avisos')) {
+            let i = 0;
+            $('#avisos_data').html('')
+            avisos.forEach(aviso => {
 
-            $('#avisos_data').append(`
+                $('#avisos_data').append(`
             
             <div class="aviso">
             <div class="data">
@@ -73,161 +73,168 @@ function cargar_avisos() {
 
             
             `)
-            i++;
-        });
+                i++;
+            });
 
-    } else {
-        localStorage.setItem('avisos', '[]');
-    }
-}
-cargar_avisos()
-function load_video() {
-    let queue = localStorage.getItem('queue')
-    if (queue == undefined || queue == null) {
-        localStorage.setItem('queue', '[]')
-        queue = [];
-    } else {
-        queue = JSON.parse(queue)
-    }
-    let now = localStorage.getItem('now')
-    if (!now) {
-        localStorage.setItem('now', '{}')
-        now = '{}'
-    }
-
-    if (now == '{}') {
-        if (queue[0]) {
-            now = queue[0];
-            localStorage.setItem('now', JSON.stringify(now))
-            queue.splice(0, 1)
-            localStorage.setItem('queue', JSON.stringify(queue))
         } else {
-            now = {}
+            localStorage.setItem('avisos', '[]');
         }
-    } else {
-        now = JSON.parse(now)
-
     }
-    console.log(queue)
-    console.log(now)
-    if (now['url']) {
-        set({
-            type: 'video',
-            url: now
-        })
-        ipcRenderer.send('app', {
-            type: 'load_queue',
-        })
-        ipcRenderer.send('app', {
-            type: 'status',
-            data: current_status,
-            playing: $('#video').get(0).paused,
-            muted: $('#video').prop('muted')
-        })
-    } else {
-        $('#video').attr('src', '')
-        ipcRenderer.send('app', {
-            type: 'clearstatus'
-        })
-        $('.video-title').html('No hay música en el hilo')
-        $('.video-artist').html('')
-        set({type: 'pantalla', pantalla: 'avisos'})
-    }
-}
+    cargar_avisos()
+    $('#videoclip-info').fadeOut();
 
+    function load_video() {
+        let queue = localStorage.getItem('queue')
+        if (queue == undefined || queue == null) {
+            localStorage.setItem('queue', '[]')
+            queue = [];
+        } else {
+            queue = JSON.parse(queue)
+        }
+        let now = localStorage.getItem('now')
+        if (!now) {
+            localStorage.setItem('now', '{}')
+            now = '{}'
+        }
 
-
-
-load_video()
-document.getElementById('video').onended = () => {
-    localStorage.setItem('now', '{}')
-    load_video()
-}
-$('#video').prop('volume', 0.5)
-
-function set(data) {
-    console.log(data)
-    switch (data['type']) {
-        case 'cargar_avisos':
-            cargar_avisos()
-            break;
-        case 'load_video':
-            load_video()
-            break;
-        case 'pantalla':
-            $('.pant').fadeOut();
-            $('#' + data['pantalla']).fadeIn();
-            break;
-        case 'control':
-            switch (data['action']) {
-                case 'next':
-                    let cola = variable('queue');
-                    if (cola.length <= 0) {
-                        return false;
-                    }
-                    localStorage.setItem('now', '{}')
-                    load_video();
-                    break;
-                case 'mute':
-                    $('#video').prop('muted', data['value'])
-                    break;
-                case 'volume':
-                    $('#video').prop('volume', data['value'] / 100)
-                    break;
-                case 'pause':
-                    document.getElementById('video').pause()
-                    break;
-                case 'play':
-                    document.getElementById('video').play()
-                    break;
-                default:
-                    break;
+        if (now == '{}') {
+            if (queue[0]) {
+                now = queue[0];
+                localStorage.setItem('now', JSON.stringify(now))
+                queue.splice(0, 1)
+                localStorage.setItem('queue', JSON.stringify(queue))
+            } else {
+                now = {}
             }
-            break;
-        case 'video':
-            current_status = data;
-            $('.video-title').text(data['url']['raw']['title'])
-            $('.video-artist').text(data['url']['raw']['uploader'])
-            document.getElementById('video').src = data['url']['url']
-            document.getElementById('video').play()
+        } else {
+            now = JSON.parse(now)
 
-            if (data['ts']) {
-                document.getElementById('video').currentTime = data['ts']
-            }
-            break;
-        case 'getstatus':
-            if (current_status) {
-                current_status['ts'] = document.getElementById('video').currentTime
-
-            }
-
-
+        }
+        console.log(queue)
+        console.log(now)
+        if (now['url']) {
+            set({
+                type: 'video',
+                url: now
+            })
+            ipcRenderer.send('app', {
+                type: 'load_queue',
+            })
             ipcRenderer.send('app', {
                 type: 'status',
                 data: current_status,
                 playing: $('#video').get(0).paused,
                 muted: $('#video').prop('muted')
             })
+            $('#videoclip-info').fadeIn();
+            setTimeout(() => {
+                $('#videoclip-info').fadeOut();
+            }, 5000);
+        } else {
+            $('#video').attr('src', '')
+            ipcRenderer.send('app', {
+                type: 'clearstatus'
+            })
+            $('.video-title').html('No hay música en el hilo')
+            $('.video-artist').html('')
+            set({
+                type: 'pantalla',
+                pantalla: 'avisos'
+            })
+        }
+    }
 
-            if (variable('now') == {}) {
-                ipcRenderer.send('app', {
-                    type: 'clearstatus'
-                })
-            }
-            default:
+
+
+
+    load_video()
+    document.getElementById('video').onended = () => {
+        localStorage.setItem('now', '{}')
+        load_video()
+    }
+    $('#video').prop('volume', 0.5)
+
+    function set(data) {
+        console.log(data)
+        switch (data['type']) {
+            case 'cargar_avisos':
+                cargar_avisos()
                 break;
+            case 'load_video':
+                load_video()
+                break;
+            case 'pantalla':
+                $('.pant').fadeOut();
+                $('#' + data['pantalla']).fadeIn();
+                break;
+            case 'control':
+                switch (data['action']) {
+                    case 'next':
+                        let cola = variable('queue');
+                        if (cola.length <= 0) {
+                            return false;
+                        }
+                        localStorage.setItem('now', '{}')
+                        load_video();
+                        break;
+                    case 'mute':
+                        $('#video').prop('muted', data['value'])
+                        break;
+                    case 'volume':
+                        $('#video').prop('volume', data['value'] / 100)
+                        break;
+                    case 'pause':
+                        document.getElementById('video').pause()
+                        break;
+                    case 'play':
+                        document.getElementById('video').play()
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 'video':
+                current_status = data;
+                $('.video-title').text(data['url']['raw']['title'])
+                $('.video-artist').text(data['url']['raw']['uploader'])
+                document.getElementById('video').src = data['url']['url']
+                document.getElementById('video').play()
+
+                if (data['ts']) {
+                    document.getElementById('video').currentTime = data['ts']
+                }
+                break;
+            case 'getstatus':
+                if (current_status) {
+                    current_status['ts'] = document.getElementById('video').currentTime
+
+                }
+
+
+                ipcRenderer.send('app', {
+                    type: 'status',
+                    data: current_status,
+                    playing: $('#video').get(0).paused,
+                    muted: $('#video').prop('muted')
+                })
+
+                if (variable('now') == {}) {
+                    ipcRenderer.send('app', {
+                        type: 'clearstatus'
+                    })
+                }
+                default:
+                    break;
+
+        }
 
     }
 
-}
+    setInterval(() => {
+        let currenttime = new Date()
+        $('.hora').html(currenttime.getHours() + ':' + ('0' + currenttime.getMinutes()).substr(-
+            2))
+    }, 100);
 
-setInterval(() => {
-    let currenttime = new Date()
-    $('.hora').html(currenttime.getHours() + ':' + ('0' + currenttime.getMinutes()).substr(-
-        2))
-}, 100);
-
-const server = false
-
-
+    const server = false
 </script>
