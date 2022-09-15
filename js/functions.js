@@ -16,11 +16,16 @@ function mostrar(pantalla) {
   });
 }
 
-function variable(variable) {
+function variable(variable, def) {
   let va = localStorage.getItem(variable);
   if (va && va != "{}") {
     return JSON.parse(va);
   } else {
-    return false;
+    if (def) {
+      localStorage.setItem(variable, def);
+      return JSON.parse(def);
+    } else {
+      return false;
+    }
   }
 }

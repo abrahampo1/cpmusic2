@@ -41,6 +41,7 @@
 
 <script>
     let current_status
+    let current_playlist_song = 0;
     ipcRenderer.on('pantalla', (sender, data) => {
         set(data)
     })
@@ -131,6 +132,20 @@
                 $('#videoclip-info').fadeOut();
             }, 5000);
         } else {
+            let autoplay = variable('playlists')
+            if (autoplay['auto']) {
+                if (autoplay['auto']['songs']) {
+                    if (autoplay['auto']['songs'][current_playlist_song]) {
+                        add_queue(autoplay['auto']['songs'][current_playlist_song].url);
+                        current_playlist_song++;
+                        return false;
+                    } else {
+                        current_playlist_song = 0;
+                        load_video()
+                        return false;
+                    }
+                }
+            }
             $('#video').attr('src', '')
             ipcRenderer.send('app', {
                 type: 'clearstatus'
@@ -145,7 +160,9 @@
     }
 
 
-
+    function load_queue() {
+        load_video()
+    }
 
     load_video()
     document.getElementById('video').onended = () => {
@@ -171,7 +188,9 @@
                 switch (data['action']) {
                     case 'next':
                         let cola = variable('queue');
-                        if (cola.length <= 0) {
+                        let playlist = variable('playlists')
+
+                        if (cola.length <= 0 && (!playlist['auto'] || playlist['auto']['songs'].length <= 0)) {
                             return false;
                         }
                         localStorage.setItem('now', '{}')

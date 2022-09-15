@@ -11,7 +11,7 @@
 
     </div>
     <h1>Cola de canciones</h1>
-    <div class="queue" id="queue">
+    <div class="queue" id="playlist">
 
     </div>
 </div>
@@ -28,13 +28,39 @@
             r.forEach(video => {
                 $('#search_results').append(`
             
-            <div class="queuevideo click" onclick="add_queue('${video.url}')">
+            <div class="queuevideo click" onclick="add_playlist('auto','${video.url}', '${video.title}')">
                 <div class="w100" >${video.title}</div>
             </div>
             
             `)
             });
         })
+    }
+
+    function add_playlist(list, url, title) {
+        $('#search_results').html('')
+
+        let playlist = variable('playlists', '{}')
+        if (
+            playlist[list]
+        ) {
+            playlist[list]['songs'].push({
+                url: url,
+                title: title
+            })
+        } else {
+            playlist[list] = {
+                name: list,
+                songs: []
+            }
+            playlist[list]['songs'].push({
+                url: url,
+                title: title
+            })
+
+        }
+        localStorage.setItem('playlists', JSON.stringify(playlist))
+        load_playlist('auto')
     }
 
     function send_video(url) {
@@ -52,37 +78,39 @@
         })
     }
 
-    function load_queue() {
-        let queue = localStorage.getItem('queue')
-        if (!queue) {
-            localStorage.setItem('queue', '[]')
-            queue = [];
-        } else {
-            queue = JSON.parse(queue)
-        }
-        $('#queue').html('')
+    function load_playlist(name) {
+        let list = variable('playlists', '{}')
+        $('#playlist').html('')
         let i = 1
-        queue.forEach(video => {
-            $('#queue').append(`
+
+        if (!list[name]) {
+            return;
+        }
+
+        if (!list[name]['songs']) {
+            return;
+        }
+        list[name]['songs'].forEach(value => {
+            $('#playlist').append(`
             
             <div class="queuevideo">
                 <div class="w10">${i}</div>
-                <div class="w70">${video.raw.title}</div>
-                <div class="w20"><button class="btn" onclick="delete_queue(${i-1})">Eliminar</button></div>
+                <div class="w70">${value.title}</div>
+                <div class="w20"><button class="btn" onclick="delete_playlist_song('${name}',${i-1})">Eliminar</button></div>
             </div>
             
             `)
             i++;
-        });
+        })
 
     }
-    load_queue()
+    load_playlist('auto')
 
 
 
     ipcRenderer.on('app', (s, data) => {
         setTimeout(() => {
-            load_queue()
+            load_playlist('auto')
         }, 100);
     })
 
@@ -101,16 +129,11 @@
         }
     }
 
-    function delete_queue(id) {
-        let queue = localStorage.getItem('queue')
-        if (!queue) {
-            localStorage.setItem('queue', '[]')
-            queue = [];
-        } else {
-            queue = JSON.parse(queue)
-        }
-        queue.splice(id, 1)
-        localStorage.setItem('queue', JSON.stringify(queue))
-        load_queue()
+    function delete_playlist_song(list, id) {
+        let play = variable('playlists', '{}')
+
+        play[list]['songs'].splice(id, 1)
+        localStorage.setItem('playlists', JSON.stringify(play))
+        load_playlist('auto')
     }
 </script>
