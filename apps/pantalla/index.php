@@ -47,7 +47,7 @@
     if (!current_playlist) {
         current_playlist = 0;
     }
-    if (!random_song) {
+    if (!random_song || random_song == 'false') {
         random_song = false;
     }
 
@@ -176,13 +176,15 @@
             }
 
             add_queue(autoplay[current_playlist]['songs'][current_playlist_song].url);
-            if (!random_song) {
-
-                current_playlist_song++;
+            if (random_song) {
+                let rand_generated = randomIntFromInterval(0, autoplay[current_playlist]['songs'].length - 1);
+                while (current_playlist_song == rand_generated) {
+                    rand_generated = randomIntFromInterval(0, autoplay[current_playlist]['songs'].length - 1);
+                }
+                current_playlist_song = rand_generated;
             } else {
-                current_playlist_song = randomIntFromInterval(0, autoplay[current_playlist]['songs'].length - 1);
+                current_playlist_song++;
             }
-            current_playlist_song++;
             return;
 
 
