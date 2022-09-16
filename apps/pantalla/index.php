@@ -42,6 +42,15 @@
 <script>
     let current_status
     let current_playlist_song = 0;
+    let current_playlist = localStorage.getItem('current_playlist');
+    let random_song = localStorage.getItem('random')
+    if (!current_playlist) {
+        current_playlist = 0;
+    }
+    if (!random_song) {
+        random_song = false;
+    }
+
     ipcRenderer.on('pantalla', (sender, data) => {
         set(data)
     })
@@ -133,30 +142,53 @@
             }, 15000);
         } else {
             let autoplay = variable('playlists')
-            if (autoplay['auto']) {
-                if (autoplay['auto']['songs']) {
-                    if (autoplay['auto']['songs'][current_playlist_song]) {
-                        add_queue(autoplay['auto']['songs'][current_playlist_song].url);
-                        current_playlist_song++;
-                        return false;
-                    } else {
-                        current_playlist_song = 0;
-                        load_video()
-                        return false;
-                    }
-                }
+            if (!autoplay[current_playlist]) {
+                $('#video').attr('src', '')
+                ipcRenderer.send('app', {
+                    type: 'clearstatus'
+                })
+                $('.video-title').html('No hay música en el hilo')
+                $('.video-artist').html('')
+                set({
+                    type: 'pantalla',
+                    pantalla: 'avisos'
+                })
+                return
             }
-            $('#video').attr('src', '')
-            ipcRenderer.send('app', {
-                type: 'clearstatus'
-            })
-            $('.video-title').html('No hay música en el hilo')
-            $('.video-artist').html('')
-            set({
-                type: 'pantalla',
-                pantalla: 'avisos'
-            })
+
+            if (!autoplay[current_playlist]['songs']) {
+                return
+            }
+
+            if (!autoplay[current_playlist]['songs'][current_playlist_song]) {
+                current_playlist_song = 0;
+                load_video()
+                return;
+            }
+            if (random_song) {
+                let rand_generated = randomIntFromInterval(0, autoplay[current_playlist]['songs'].length - 1);
+                while (current_playlist_song == rand_generated) {
+                    rand_generated = randomIntFromInterval(0, autoplay[current_playlist]['songs'].length - 1);
+                }
+                current_playlist_song = rand_generated;
+            }
+
+            add_queue(autoplay[current_playlist]['songs'][current_playlist_song].url);
+            if (!random_song) {
+
+                current_playlist_song++;
+            } else {
+                current_playlist_song = randomIntFromInterval(0, autoplay[current_playlist]['songs'].length - 1);
+            }
+            current_playlist_song++;
+            return;
+
+
         }
+    }
+
+    function randomIntFromInterval(min, max) { // min and max included 
+        return Math.floor(Math.random() * (max - min + 1) + min)
     }
 
 
@@ -190,7 +222,7 @@
                         let cola = variable('queue');
                         let playlist = variable('playlists')
 
-                        if (cola.length <= 0 && (!playlist['auto'] || playlist['auto']['songs'].length <= 0)) {
+                        if (cola.length <= 0 && (!playlist[current_playlist] || playlist[current_playlist]['songs'].length <= 0)) {
                             return false;
                         }
                         localStorage.setItem('now', '{}')
@@ -217,11 +249,21 @@
                 $('.video-title').text(data['url']['raw']['title'])
                 $('.video-artist').text(data['url']['raw']['uploader'])
                 document.getElementById('video').src = data['url']['url']
+                ipcRenderer.send('discord_url', variable('now')['raw']['original_url'])
                 document.getElementById('video').play()
 
                 if (data['ts']) {
                     document.getElementById('video').currentTime = data['ts']
                 }
+                break;
+            case 'play_playlist':
+                localStorage.setItem('now', '{}');
+                localStorage.setItem('queue', '[]');
+                current_playlist = data['playlist'];
+                random_song = data['random'];
+                localStorage.setItem('current_playlist', data['playlist'])
+                localStorage.setItem('random', data['random'])
+                load_video();
                 break;
             case 'getstatus':
                 if (current_status) {
@@ -242,6 +284,7 @@
                         type: 'clearstatus'
                     })
                 }
+
                 default:
                     break;
 
@@ -254,6 +297,16 @@
         $('.hora').html(currenttime.getHours() + ':' + ('0' + currenttime.getMinutes()).substr(-
             2))
     }, 100);
+
+
+    ipcRenderer.on('add_queue', (sender, data) => {
+        add_queue(data);
+    })
+
+    ipcRenderer.on('discord_joined', (sender, data) => {
+        let now = variable('now');
+        ipcRenderer.send('discord_url', now['raw']['original_url'])
+    })
 
     const server = false
 </script>

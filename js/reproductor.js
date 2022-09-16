@@ -14,7 +14,6 @@ ipcRenderer.on("app", (s, data) => {
       $("#track_volume").html("volume_off");
     }
   }
-
   if (data.type == "clearstatus") {
     $("#track_title").text("");
     $("#track_artist").text("Hecho por @Abrahampo1");
@@ -37,9 +36,11 @@ $("#play_arrow").on("click", () => {
   if ($("#play_arrow").html() == "pause") {
     $("#play_arrow").html("play_arrow");
     video("pause");
+    ipcRenderer.send("discord_pause", true);
   } else {
     $("#play_arrow").html("pause");
     video("play");
+    ipcRenderer.send("discord_resume", true);
   }
 });
 
@@ -87,5 +88,13 @@ function add_queue(url) {
         type: "load_video",
       });
     }
+  });
+}
+
+function play_playlist(id, random = false) {
+  ipcRenderer.send("pantalla", {
+    type: "play_playlist",
+    playlist: id,
+    random: random,
   });
 }

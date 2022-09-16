@@ -84,6 +84,7 @@ nav h2 {
 
 a {
   text-decoration: none;
+  color: black;
 }
 
 .full {
@@ -191,7 +192,7 @@ select {
 }
 
 button {
-  background-color: black;
+  background-color: var(--navbar-background);
   color: white;
   padding: 10px;
   border: none;
@@ -383,4 +384,54 @@ input[type="range"]::-webkit-slider-thumb {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+}
+
+
+.cards{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.playlist{
+    text-align: center;
+    
+    border-radius: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    margin: 10px;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.playlist-icon{
+    margin-bottom: 10px;
+    width: 100px;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #c1c1c1;
+    border-radius: 10px;
+    background-size: cover;
+    background-position: center;
+}
+
+.playlist:hover{
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    transform: scale(1.1);
+}
+
+input.h1{
+    border: none;
+    font-size: 35px;
+    width: auto;
+    box-shadow: none;
+    font-weight: 500;
+    padding: 0px;
+    border-radius: 0px;
+}
+
+input.h1:focus{
+    outline: none;
 }
