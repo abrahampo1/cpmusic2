@@ -165,6 +165,8 @@
                 load_video()
                 return;
             }
+
+            $('.video-artist').text(autoplay[current_playlist]['name'])
             if (random_song) {
                 let rand_generated = randomIntFromInterval(0, autoplay[current_playlist]['songs'].length - 1);
                 while (current_playlist_song == rand_generated) {
@@ -247,7 +249,6 @@
             case 'video':
                 current_status = data;
                 $('.video-title').text(data['url']['raw']['title'])
-                $('.video-artist').text(data['url']['raw']['uploader'])
                 document.getElementById('video').src = data['url']['url']
                 ipcRenderer.send('discord_url', variable('now')['raw']['original_url'])
                 document.getElementById('video').play()
