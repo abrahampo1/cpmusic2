@@ -43,7 +43,9 @@
 
     function search() {
         let url = document.getElementById('url').value;
-        let load = notif('Buscando...');
+        let load = notif(`<span class="material-symbols-outlined">
+satellite_alt
+</span>`);
         yt.search(url).then(r => {
             $(load).fadeOut();
             console.log(r);

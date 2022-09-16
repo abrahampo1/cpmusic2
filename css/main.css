@@ -211,14 +211,18 @@ button {
   background-color: rgba(0, 0, 0, 0.548);
   backdrop-filter: blur(8px);
   color: white;
-  font-size: 30px;
-  font-weight: 500;
+  font-size: 60px;
+  font-weight: 400;
   border-radius: 20px;
   z-index: 1000;
   display: flex;
   align-content: center;
   align-items: center;
   justify-content: center;
+}
+.center-modal span{
+    font-size: 100px;
+    font-weight: 400;
 }
 
 .center {

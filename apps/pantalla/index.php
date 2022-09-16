@@ -167,13 +167,6 @@
             }
 
             $('.video-artist').text(autoplay[current_playlist]['name'])
-            if (random_song) {
-                let rand_generated = randomIntFromInterval(0, autoplay[current_playlist]['songs'].length - 1);
-                while (current_playlist_song == rand_generated) {
-                    rand_generated = randomIntFromInterval(0, autoplay[current_playlist]['songs'].length - 1);
-                }
-                current_playlist_song = rand_generated;
-            }
 
             add_queue(autoplay[current_playlist]['songs'][current_playlist_song].url);
             if (random_song) {

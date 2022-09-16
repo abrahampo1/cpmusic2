@@ -64,9 +64,17 @@ $("#next_song").on("click", () => {
 
 function add_queue(url) {
   $("#search_results").html("");
-  let load = notif("cargando...");
+  let load = notif(`
+  <span class="material-symbols-outlined">
+satellite_alt
+</span>
+  `);
   obtener_url_video(url).then((r) => {
-    load.innerText = "OK";
+    load.innerHTML = `
+    <span class="material-symbols-outlined">
+check_circle
+</span>
+    `;
     setTimeout(() => {
       $(load).fadeOut();
     }, 1000);

@@ -2,7 +2,7 @@ function notif(text) {
   let div = document.createElement("div");
   div.classList.add("center-modal");
   div.style.display = "none";
-  div.innerText = text;
+  div.innerHTML = text;
 
   document.body.appendChild(div);
   $(div).fadeIn();
