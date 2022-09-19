@@ -322,13 +322,21 @@
             default:
                 recreo = false;
                 break;
-            if(recreo){
-                $('#video').prop('volume', 0.5)
-            }else{
-                $('#video').prop('volume', 0.1)
-            }
+
         }
-    }, 1000);
+        if (recreo) {
+            if (!localStorage.getItem('default_vol')) {
+                localStorage.setItem('default_vol', 0.6)
+            }
+            $('#video').prop('volume', localStorage.getItem('default_vol'))
+            console.log('volume', 0, 5)
+        } else {
+            if (!localStorage.getItem('class_vol')) {
+                localStorage.setItem('class_vol', 0.1)
+            }
+            $('#video').prop('volume', localStorage.getItem('class_vol'))
+        }
+    }, 1000); 
 
 
     ipcRenderer.on('add_queue', (sender, data) => {
