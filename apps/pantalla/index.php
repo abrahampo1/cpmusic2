@@ -288,11 +288,47 @@
 
     }
 
+    let recreo = false;
     setInterval(() => {
         let currenttime = new Date()
         $('.hora').html(currenttime.getHours() + ':' + ('0' + currenttime.getMinutes()).substr(-
             2))
-    }, 100);
+
+        switch (currenttime.getHours()) {
+            case 10:
+                if (currenttime.getMinutes() >= 20) {
+                    recreo = true;
+                }
+                if (currenttime.getMinutes() <= 45) {
+                    recreo = false;
+                }
+                break;
+            case 12:
+                if (currenttime.getMinutes() >= 20) {
+                    recreo = true;
+                }
+                if (currenttime.getMinutes() <= 45) {
+                    recreo = false;
+                }
+                break;
+            case 17:
+                if (currenttime.getMinutes() >= 30) {
+                    recreo = true;
+                }
+                if (currenttime.getMinutes() <= 55) {
+                    recreo = false;
+                }
+                break;
+            default:
+                recreo = false;
+                break;
+            if(recreo){
+                $('#video').prop('volume', 0.5)
+            }else{
+                $('#video').prop('volume', 0.1)
+            }
+        }
+    }, 1000);
 
 
     ipcRenderer.on('add_queue', (sender, data) => {
