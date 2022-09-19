@@ -296,26 +296,27 @@
 
         switch (currenttime.getHours()) {
             case 10:
-                if (currenttime.getMinutes() >= 20) {
+              
+                if (currenttime.getMinutes() >= 25 && currenttime.getMinutes() <= 45) {
                     recreo = true;
-                }
-                if (currenttime.getMinutes() <= 45) {
+                }else
+                 {
                     recreo = false;
                 }
                 break;
             case 12:
-                if (currenttime.getMinutes() >= 20) {
+                if (currenttime.getMinutes() >= 25 && currenttime.getMinutes() <= 45) {
                     recreo = true;
-                }
-                if (currenttime.getMinutes() <= 45) {
+                }else
+                 {
                     recreo = false;
                 }
                 break;
             case 17:
-                if (currenttime.getMinutes() >= 30) {
+                if (currenttime.getMinutes() >= 30 && currenttime.getMinutes() <= 55) {
                     recreo = true;
-                }
-                if (currenttime.getMinutes() <= 55) {
+                }else
+                 {
                     recreo = false;
                 }
                 break;
