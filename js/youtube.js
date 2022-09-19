@@ -1,14 +1,15 @@
 const { resolve } = require("path");
 const { create: createYoutubeDl } = require("youtube-dl-exec");
+const youtubedl = require("youtube-dl-exec");
 const { ipcMain, ipcRenderer } = require("electron");
 const appRootDir = require("app-root-dir").get();
 let fullurl =
   appRootDir +
   "/../app.asar.unpacked/node_modules/youtube-dl-exec/bin/yt-dlp.exe";
 
-const youtubedl = createYoutubeDl(
-  fullurl
-);
+// const youtubedl = createYoutubeDl(
+//   fullurl
+// );
 
 
 window.$ = window.jQuery = require("jquery");

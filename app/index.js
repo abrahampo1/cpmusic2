@@ -2,7 +2,7 @@ const { app, BrowserWindow, ipcMain } = require("electron");
 require("dotenv").config();
 
 // const url = 'https://music.ro-am.eu'
-const url = "http://musica.localhost";
+const url = "http://192.168.5.30";
 
 let MainWindow;
 let Reproductor;
