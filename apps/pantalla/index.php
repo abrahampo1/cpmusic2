@@ -296,28 +296,35 @@
 
         switch (currenttime.getHours()) {
             case 10:
-              
-                if (currenttime.getMinutes() >= 25 && currenttime.getMinutes() <= 45) {
+
+                if (currenttime.getMinutes() >= 20 && currenttime.getMinutes() <= 45) {
                     recreo = true;
-                }else
-                 {
+                } else {
                     recreo = false;
                 }
                 break;
             case 12:
-                if (currenttime.getMinutes() >= 25 && currenttime.getMinutes() <= 45) {
+                if (currenttime.getMinutes() >= 20 && currenttime.getMinutes() <= 45) {
                     recreo = true;
-                }else
-                 {
+                } else {
                     recreo = false;
                 }
                 break;
             case 17:
-                if (currenttime.getMinutes() >= 30 && currenttime.getMinutes() <= 55) {
+                if (currenttime.getMinutes() >= 30 && currenttime.getMinutes() <= 59) {
                     recreo = true;
-                }else
-                 {
+                } else {
                     recreo = false;
+                }
+                break;
+            case 8:
+                if (currenttime.getMinutes() <= 45) {
+                    recreo = true
+                }
+                break;
+            case 14:
+                if (currenttime.getMinutes() >= 20) {
+                    recreo = true
                 }
                 break;
             default:
@@ -337,7 +344,7 @@
             }
             $('#video').prop('volume', localStorage.getItem('class_vol'))
         }
-    }, 1000); 
+    }, 1000);
 
 
     ipcRenderer.on('add_queue', (sender, data) => {

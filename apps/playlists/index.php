@@ -1,6 +1,6 @@
 <div class="app-holder">
 
-    <button class="btn">Crear Playlist</button>
+    <button class="btn" onclick="write_modal('Nombre de la playlist').then(r=>crear_playlist(r))">Crear Playlist</button>
     <hr>
     <div class="cards" id="pl">
         <a class="playlist" href="playlist?p=1">
