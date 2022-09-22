@@ -40,6 +40,20 @@
 
 
 <script>
+    function variable(variable, def) {
+        let va = localStorage.getItem(variable);
+        if (va && va != "{}") {
+            return JSON.parse(va);
+        } else {
+            if (def) {
+                localStorage.setItem(variable, def);
+                return JSON.parse(def);
+            } else {
+                return false;
+            }
+        }
+    }
+
     let current_status
     let current_playlist_song = 0;
     let current_playlist = localStorage.getItem('current_playlist');
