@@ -40,6 +40,17 @@
 
 
 <script>
+    function notif(text) {
+        let div = document.createElement("div");
+        div.classList.add("center-modal");
+        div.style.display = "none";
+        div.innerHTML = text;
+
+        document.body.appendChild(div);
+        $(div).fadeIn();
+        return div;
+    }
+
     function variable(variable, def) {
         let va = localStorage.getItem(variable);
         if (va && va != "{}") {
