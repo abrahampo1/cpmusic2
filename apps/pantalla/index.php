@@ -341,6 +341,11 @@
                     recreo = true
                 }
                 break;
+            case 16:
+                if (currenttime.getMinutes() >= 0 && currenttime.getMinutes() <= 15) {
+                    recreo = true
+                }
+                break;
             default:
                 recreo = false;
                 break;
