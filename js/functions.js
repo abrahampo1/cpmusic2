@@ -30,17 +30,16 @@ function variable(variable, def) {
   }
 }
 
-
-function write_modal(title){
-  let modal = document.createElement('div');
-  modal.classList.add('modal');
-  let modal_content = document.createElement('div');
-  modal_content.classList.add('content');
+function write_modal(titl) {
+  let modal = document.createElement("div");
+  modal.classList.add("modal");
+  let modal_content = document.createElement("div");
+  modal_content.classList.add("content");
   modal.appendChild(modal_content);
-  let title = document.createElement('h2');
-  title.innerHTML = title;
+  let title = document.createElement("h2");
+  title.innerHTML = titl;
   modal_content.appendChild(title);
-  let input = document.createElement('input');
-  input.classList.add('modalinput')
+  let input = document.createElement("input");
+  input.classList.add("modalinput");
   document.body.appendChild(modal);
 }
