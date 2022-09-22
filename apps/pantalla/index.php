@@ -314,6 +314,7 @@
     }
 
     let recreo = false;
+    let last;
     setInterval(() => {
         let currenttime = new Date()
         $('.hora').html(currenttime.getHours() + ':' + ('0' + currenttime.getMinutes()).substr(-
@@ -361,18 +362,20 @@
                 break;
 
         }
-        if (recreo) {
-            if (!localStorage.getItem('default_vol')) {
-                localStorage.setItem('default_vol', 0.6)
+        if (recreo != last) {
+            if (recreo) {
+                if (!localStorage.getItem('default_vol')) {
+                    localStorage.setItem('default_vol', 0.6)
+                }
+                $('#video').prop('volume', localStorage.getItem('default_vol'))
+            } else {
+                if (!localStorage.getItem('class_vol')) {
+                    localStorage.setItem('class_vol', 0.1)
+                }
+                $('#video').prop('volume', localStorage.getItem('class_vol'))
             }
-            $('#video').prop('volume', localStorage.getItem('default_vol'))
-            console.log('volume', 0, 5)
-        } else {
-            if (!localStorage.getItem('class_vol')) {
-                localStorage.setItem('class_vol', 0.1)
-            }
-            $('#video').prop('volume', localStorage.getItem('class_vol'))
         }
+
     }, 1000);
 
 
