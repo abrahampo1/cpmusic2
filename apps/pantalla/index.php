@@ -313,22 +313,16 @@
 
                 if (currenttime.getMinutes() >= 20 && currenttime.getMinutes() <= 45) {
                     recreo = true;
-                } else {
-                    recreo = false;
                 }
                 break;
             case 12:
                 if (currenttime.getMinutes() >= 20 && currenttime.getMinutes() <= 45) {
                     recreo = true;
-                } else {
-                    recreo = false;
                 }
                 break;
             case 17:
                 if (currenttime.getMinutes() >= 30 && currenttime.getMinutes() <= 59) {
                     recreo = true;
-                } else {
-                    recreo = false;
                 }
                 break;
             case 8:
@@ -343,6 +337,11 @@
                 break;
             case 16:
                 if (currenttime.getMinutes() >= 0 && currenttime.getMinutes() <= 15) {
+                    recreo = true
+                }
+                break;
+            case 18:
+                if (currenttime.getMinutes() >= 30) {
                     recreo = true
                 }
                 break;
