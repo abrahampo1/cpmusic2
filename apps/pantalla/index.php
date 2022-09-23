@@ -320,6 +320,8 @@
         $('.hora').html(currenttime.getHours() + ':' + ('0' + currenttime.getMinutes()).substr(-
             2))
 
+        recreo = false;
+
         switch (currenttime.getHours()) {
             case 10:
 
